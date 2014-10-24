@@ -3,19 +3,19 @@
     ViewBag.Title = "Trocar Regra";
 }
 
-<h2>Escolhe a nova regra</h2>
+<h2>Troca de regra</h2>
 
-@using (Html.BeginForm("ChangeRole", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("ChangeRole", "Manage", new { userId = Model.UserId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.UserId)
-    <h4>Digite sua antiga e nova senha</h4>
+    <h4>Escolha a nova regra</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.Role, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.PasswordFor(m => m.Role, new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.Role, (List<SelectListItem>)ViewBag.Roles, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">

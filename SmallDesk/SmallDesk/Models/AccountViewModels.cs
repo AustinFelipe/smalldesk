@@ -61,6 +61,28 @@ namespace SmallDesk.Models
         public bool RememberMe { get; set; }
     }
 
+    public class UserProfileModel
+    {
+        public string Id { get; set; }
+        [Display(Name = "Usuário")]
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        [Display(Name = "Departamento")]
+        public string Department { get; set; }
+        [Display(Name = "Regra")]
+        public string Role { get; set; }
+    }
+
+    public class DeleteViewModel
+    {
+        [Required]
+        public string UserId { get; set; }
+        [Display(Name = "Usuário")]
+        public string UserName { get; set; }
+        [Display(Name = "Departamento")]
+        public string Department { get; set; }
+    }
+
     public class RegisterViewModel
     {
         [Required]

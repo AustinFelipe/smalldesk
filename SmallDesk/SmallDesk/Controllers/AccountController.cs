@@ -71,9 +71,25 @@ namespace SmallDesk.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(Database.Users.ToList());
+            var fromUsers = Database.Users.Where(t => t.UserName != "admin").ToList();
+            List<UserProfileModel> users = new List<UserProfileModel>();
+            IList<string> roles;
+            foreach (var item in fromUsers)
+            {
+                roles = await UserManager.GetRolesAsync(item.Id);
+                users.Add(new UserProfileModel()
+                    {
+                        Id = item.Id,
+                        Department = item.Department.Description,
+                        Email = item.Email,
+                        UserName = item.UserName,
+                        Role = roles.FirstOrDefault()
+                    });
+            }
+
+            return View(users);
         }
 
         //
@@ -124,6 +140,7 @@ namespace SmallDesk.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -149,7 +166,7 @@ namespace SmallDesk.Controllers
 
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                        //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                         // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                         // Send an email with this link
@@ -165,6 +182,49 @@ namespace SmallDesk.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Delete(string userId)
+        {
+            var user = await UserManager.FindByIdAsync(userId);
+            var toDelete = new DeleteViewModel()
+            {
+                UserId = user.Id,
+                Department = user.Department.Description,
+                UserName = user.UserName
+            };
+            return View(toDelete);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(DeleteViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                var userFound = await UserManager.FindByIdAsync(user.UserId);
+
+                if (userFound == null)
+                {
+                    ModelState.AddModelError("", "Usuário não encontrado.");
+                }
+                else
+                {
+
+                    var result = await UserManager.DeleteAsync(userFound);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+
+                    AddErrors(result);
+                }
+            }
+
+            return View(user);
         }
 
         //

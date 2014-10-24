@@ -20,6 +20,16 @@ namespace SmallDesk.Models
         public string Role { get; set; }
     }
 
+    public class ChangeDepartmentModel
+    {
+        [Required]
+        public string UserId { get; set; }
+
+        [Required]
+        [Display(Name = "Novo setor")]
+        public int DepartmentId { get; set; }
+    }
+
     public class SetPasswordViewModel
     {
         [Required]

@@ -13,14 +13,7 @@
         <dt>Senha:</dt>
         <dd>
             [
-                @if (!User.IsInRole("Admin"))
-                {
-                    @Html.ActionLink("Alterar Senha", "ChangePassword")
-                }
-                else
-                {
-                    @Html.ActionLink("Alterar Senha", "ChangePasswordById", new { userId = Model.UserId })
-                }
+                @Html.ActionLink("Alterar Senha", "ChangePassword", new { userId = Model.UserId })
             ]
         </dd>
         @if (User.IsInRole("Admin"))
@@ -28,7 +21,13 @@
             <dt>Regra:</dt>
             <dd>
                 [
-                    @Html.ActionLink("Alterar Regra", "ChangeRole")
+                    @Html.ActionLink("Alterar Regra", "ChangeRole", new { userId = Model.UserId })
+                ]
+            </dd>
+            <dt>Setor:</dt>
+            <dd>
+                [
+                @Html.ActionLink("Alterar Setor", "ChangeDepartment", new { userId = Model.UserId })
                 ]
             </dd>
         }

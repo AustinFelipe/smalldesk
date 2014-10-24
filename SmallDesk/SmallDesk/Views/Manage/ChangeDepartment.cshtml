@@ -1,0 +1,26 @@
+﻿@model SmallDesk.Models.ChangeDepartmentModel
+@{
+    ViewBag.Title = "Trocar Setor";
+}
+
+<h2>Troca de setor</h2>
+
+@using (Html.BeginForm("ChangeDepartment", "Manage", new { userId = Model.UserId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.UserId)
+    <h4>Escolha o novo setor</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.DepartmentId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.DepartmentId, (List<SelectListItem>)ViewBag.Departments, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Alterar Setor" class="btn btn-default" />
+        </div>
+    </div>
+}

@@ -49,19 +49,20 @@ namespace SmallDesk.Controllers
         // GET: /Manage/Index
         public ActionResult Index(string userId, ManageMessageId? message)
         {
+            if (isUserTryingAdmin(userId))
+                return View("Error");
+
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+                message == ManageMessageId.ChangePasswordSuccess ? "A senha foi alterado com sucesso."
+                : message == ManageMessageId.SetPasswordSuccess ? "Seu password foi setado."
                 : message == ManageMessageId.RoleChanged ? "Regra alterada com sucesso."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.DepartmentChanged ? "Setor alterado com sucesso."
+                : message == ManageMessageId.Error ? "Ops, Ocorreu um erro. =("
                 : "";
 
             var model = new IndexViewModel
             {
-                UserId = String.IsNullOrEmpty(userId) ? User.Identity.GetUserId() : userId
+                UserId = String.IsNullOrEmpty(userId) ? "" : userId
             };
 
             return View(model);
@@ -71,7 +72,6 @@ namespace SmallDesk.Controllers
         public async Task<ActionResult> ChangeRole(string userId)
         {
             var user = await UserManager.FindByIdAsync(userId);
-            IList<string> roles = new List<string>();
             var model = new ChangeRoleModel();
 
             if (user == null)
@@ -80,16 +80,17 @@ namespace SmallDesk.Controllers
             } 
             else
             {
-                roles = await UserManager.GetRolesAsync(userId);
-                roles.FirstOrDefault();
-                var changeRoleOb = new ChangeRoleModel()
-                {
-                    Role = roles.FirstOrDefault(),
-                    UserId = userId
-                };
+                model.Role = user.Roles.FirstOrDefault().RoleId ?? "";
+                model.UserId = userId;
             }
 
-            ViewBag.Roles = RoleList.CreateSelectableList(Database);
+            var r = RoleList.CreateSelectableList(Database);
+            //foreach (var role in r)
+            //{
+            //    role.Selected = (role.Text == model.Role);
+            //}
+            ViewBag.Roles = r;
+            
             return View(model);
         }
 
@@ -101,13 +102,14 @@ namespace SmallDesk.Controllers
             if (ModelState.IsValid)
             {
                 var roles = await UserManager.GetRolesAsync(model.UserId);
+                var roleFound = Database.Roles.Find(model.Role);
 
                 foreach (var role in roles)
                 {
                     await UserManager.RemoveFromRoleAsync(model.UserId, role);
                 }
 
-                await UserManager.AddToRoleAsync(model.UserId, model.Role);
+                await UserManager.AddToRoleAsync(model.UserId, roleFound.Name);
 
                 return RedirectToAction("Index", new { userId = model.UserId, message = ManageMessageId.RoleChanged });
             }
@@ -116,15 +118,68 @@ namespace SmallDesk.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Manage/ChangePassword
-        public ActionResult ChangePassword()
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> ChangeDepartment(string userId)
         {
-            return View();
+            var user = await UserManager.FindByIdAsync(userId);
+            var model = new ChangeDepartmentModel();
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Usuário não encontrado");
+            }
+            else
+            {
+                model.DepartmentId = user.DepartmentId;
+                model.UserId = userId;
+            }
+
+            var r = DepartamentList.CreateSelectableList(Database);
+            ViewBag.Departments = r;
+
+            return View(model);
         }
 
-        public ActionResult ChangePasswordById(string userId)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> ChangeDepartment(ChangeDepartmentModel model)
         {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByIdAsync(model.UserId);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Usuário não encontrado");
+                }
+                else
+                {
+                    user.DepartmentId = model.DepartmentId;
+                    var result = await UserManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", new { userId = model.UserId, message = ManageMessageId.DepartmentChanged });
+                    }
+
+                    AddErrors(result);
+                }
+            }
+
+            ViewBag.Roles = RoleList.CreateSelectableList(Database);
+            return View(model);
+        }
+
+        //
+        // GET: /Manage/ChangePassword
+        public ActionResult ChangePassword(string userId)
+        {
+            if (isUserTryingAdmin(userId))
+                return View("Error");
+
+            ViewBag.userId = userId;
+
             return View();
         }
 
@@ -132,8 +187,11 @@ namespace SmallDesk.Controllers
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<ActionResult> ChangePassword(string userId, ChangePasswordViewModel model)
         {
+            if (isUserTryingAdmin(userId))
+                return View("Error");
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -196,6 +254,14 @@ namespace SmallDesk.Controllers
             }
         }
 
+        private bool isUserTryingAdmin(string userId)
+        {
+            if (!String.IsNullOrEmpty(userId) && !User.IsInRole("Admin"))
+                return true;
+
+            return false;
+        }
+
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
@@ -239,6 +305,7 @@ namespace SmallDesk.Controllers
             RemoveLoginSuccess,
             RemovePhoneSuccess,
             RoleChanged,
+            DepartmentChanged,
             Error
         }
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SmallDesk.Models.ApplicationUser>
+﻿@model IEnumerable<SmallDesk.Models.UserProfileModel>
 
 @{
     ViewBag.Title = "Usuários";
@@ -9,36 +9,45 @@
 <p>
     @Html.ActionLink("Criar novo", "Register")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Department.Description)
-        </th>
-        <th></th>
-    </tr>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                Usuário
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Setor
+            </th>
+            <th>
+                Regra
+            </th>
+            <th></th>
+        </tr>
+    </thead>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Department.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Gerenciar", "Index", "Manage",new { userId = item.Id }, null) |
-            @Html.ActionLink("Excluir", "Delete", new { userId = item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @Html.ActionLink("Gerenciar", "Index", "Manage", new { userId = item.Id }, null) |
+                @Html.ActionLink("Excluir", "Delete", new { userId = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>
