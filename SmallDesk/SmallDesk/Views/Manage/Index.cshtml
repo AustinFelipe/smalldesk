@@ -15,11 +15,11 @@
             [
                 @if (!User.IsInRole("Admin"))
                 {
-                    Html.ActionLink("Alterar Senha", "ChangePassword");
+                    @Html.ActionLink("Alterar Senha", "ChangePassword")
                 }
                 else
                 {
-                    Html.ActionLink("Alterar Senha", "ChangePasswordById", new { userId = Model.UserId });
+                    @Html.ActionLink("Alterar Senha", "ChangePasswordById", new { userId = Model.UserId })
                 }
             ]
         </dd>

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmallDesk.Models
 {
@@ -11,6 +12,7 @@ namespace SmallDesk.Models
     {
         public int DepartmentId { get; set; }
 
+        [Display(Name="Regra")]
         public virtual Department Department { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
