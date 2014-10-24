@@ -36,6 +36,8 @@ namespace SmallDesk.Migrations
                 new Department { Description = "TI" }
             );
 
+            context.SaveChanges();
+
             IdentityRole role = context.Roles.Where(t => t.Name == "Admin").FirstOrDefault();
 
             // Cria usuário admin
@@ -53,6 +55,8 @@ namespace SmallDesk.Migrations
                     DepartmentId = 6 // Ti
                 }
             );
+
+            context.SaveChanges();
 
             ApplicationUser admin = context.Users.Where(t => t.UserName == "admin").FirstOrDefault();
 
