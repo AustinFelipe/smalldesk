@@ -1,0 +1,36 @@
+﻿@model SmallDesk.Models.IndexViewModel
+@{
+    ViewBag.Title = "Perfil";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Altera sua conta</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Senha:</dt>
+        <dd>
+            [
+                @if (!User.IsInRole("Admin"))
+                {
+                    Html.ActionLink("Alterar Senha", "ChangePassword");
+                }
+                else
+                {
+                    Html.ActionLink("Alterar Senha", "ChangePasswordById", new { userId = Model.UserId });
+                }
+            ]
+        </dd>
+        @if (User.IsInRole("Admin"))
+        {
+            <dt>Regra:</dt>
+            <dd>
+                [
+                    @Html.ActionLink("Alterar Regra", "ChangeRole")
+                ]
+            </dd>
+        }
+    </dl>
+</div>
