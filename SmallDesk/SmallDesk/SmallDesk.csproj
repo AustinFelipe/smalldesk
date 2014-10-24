@@ -167,21 +167,9 @@
     </Compile>
     <Compile Include="Helpers\DepartamentList.cs" />
     <Compile Include="Helpers\RoleList.cs" />
-    <Compile Include="Migrations\201410232039562_InitialCreate.cs" />
-    <Compile Include="Migrations\201410232039562_InitialCreate.Designer.cs">
-      <DependentUpon>201410232039562_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201410232115458_AddDepart.cs" />
-    <Compile Include="Migrations\201410232115458_AddDepart.Designer.cs">
-      <DependentUpon>201410232115458_AddDepart.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201410232224204_AddCompany.cs" />
-    <Compile Include="Migrations\201410232224204_AddCompany.Designer.cs">
-      <DependentUpon>201410232224204_AddCompany.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201410232242095_AddIssue.cs" />
-    <Compile Include="Migrations\201410232242095_AddIssue.Designer.cs">
-      <DependentUpon>201410232242095_AddIssue.cs</DependentUpon>
+    <Compile Include="Migrations\201410242311177_Initial.cs" />
+    <Compile Include="Migrations\201410242311177_Initial.Designer.cs">
+      <DependentUpon>201410242311177_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -263,17 +251,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201410232039562_InitialCreate.resx">
-      <DependentUpon>201410232039562_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201410232115458_AddDepart.resx">
-      <DependentUpon>201410232115458_AddDepart.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201410232224204_AddCompany.resx">
-      <DependentUpon>201410232224204_AddCompany.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201410232242095_AddIssue.resx">
-      <DependentUpon>201410232242095_AddIssue.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201410242311177_Initial.resx">
+      <DependentUpon>201410242311177_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

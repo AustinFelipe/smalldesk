@@ -11,7 +11,9 @@ namespace SmallDesk.Models
         public int Id { get; set; }
 
         [Required]
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser UserThatIncluded { get; set; }
+
+        public virtual ApplicationUser SupportUser { get; set; }
 
         [Required]
         [Display(Name = "Criado Em")]

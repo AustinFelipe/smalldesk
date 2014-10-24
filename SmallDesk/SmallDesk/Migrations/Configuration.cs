@@ -18,19 +18,6 @@ namespace SmallDesk.Migrations
 
         protected override void Seed(SmallDesk.Models.ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
-
             context.Roles.AddOrUpdate(
                 p => p.Name,
                 new IdentityRole("Admin"),
@@ -55,7 +42,8 @@ namespace SmallDesk.Migrations
             // CUIDADO!!! Não trocar o DepartmentId, só se tiver certeza de qual é o TI
             context.Users.AddOrUpdate(
                 p => p.Id,
-                new ApplicationUser { 
+                new ApplicationUser
+                {
                     Id = "e40cea5e-394b-4fd9-a160-254d50387d86",
                     Email = "sistema@thermoglass.com.br",
                     EmailConfirmed = false,
@@ -70,7 +58,7 @@ namespace SmallDesk.Migrations
 
             if (admin.Roles.FirstOrDefault(t => t.RoleId == role.Id) == null)
                 context.Database.ExecuteSqlCommand(
-                    "INSERT INTO AspNetUserRoles (UserId, RoleId) VALUES ('e40cea5e-394b-4fd9-a160-254d50387d86', '" + 
+                    "INSERT INTO AspNetUserRoles (UserId, RoleId) VALUES ('e40cea5e-394b-4fd9-a160-254d50387d86', '" +
                     role.Id + "');");
 
             context.Companies.AddOrUpdate(
