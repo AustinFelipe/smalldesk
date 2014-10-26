@@ -1,0 +1,62 @@
+﻿@model IEnumerable<SmallDesk.Models.Issue>
+
+@{
+    ViewBag.Title = "Chamados";
+}
+
+<h2>Chamados</h2>
+
+<p>
+    @Html.ActionLink("Criar novo", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedAt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExpectedAt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ResolvedAt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProblemData)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SolutionData)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsSolved)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedAt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExpectedAt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ResolvedAt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProblemData)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SolutionData)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsSolved)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Detalhes", "Details", new { id=item.Id }) |
+        </td>
+    </tr>
+}
+
+</table>

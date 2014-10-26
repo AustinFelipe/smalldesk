@@ -1,0 +1,73 @@
+﻿@model SmallDesk.Models.Issue
+
+@{
+    ViewBag.Title = "Criar Novo";
+}
+
+<h2>Novo Chamado</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Preencha os campos para criar um novo chamado</h4>
+        <hr />
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.SupportUser_Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SupportUser_Id, (List<SelectListItem>)ViewBag.userSupportList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SupportUser_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserThatReported_Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.UserThatReported_Id, (List<SelectListItem>)ViewBag.userList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.UserThatReported_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpectedAt, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExpectedAt, new { htmlAttributes = new { @class = "form-control", date_field = "" } })
+                @Html.ValidationMessageFor(model => model.ExpectedAt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProblemData, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.ProblemData, new { @class = "form-control", rows = "10" })
+                @Html.ValidationMessageFor(model => model.ProblemData, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Criar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Voltar para a lista", "Index")
+</div>
+
+@section scripts {
+    <script>
+        $(function () {
+            $("input[date-field]").datetimepicker({
+                lang: "pt",
+                step: 30,
+                minDate: 0,
+                mask: '39/19/9999 29:59:59',
+                format: 'd/m/Y H:i:s'
+            });
+        });
+    </script>
+}

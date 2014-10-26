@@ -13,7 +13,7 @@ namespace SmallDesk.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201410242311177_Initial"; }
+            get { return "201410261646463_Initial"; }
         }
         
         string IMigrationMetadata.Source

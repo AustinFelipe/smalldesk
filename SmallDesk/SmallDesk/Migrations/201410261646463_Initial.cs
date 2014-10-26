@@ -30,20 +30,20 @@ namespace SmallDesk.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
+                        UserThatIncluded_Id = c.String(nullable: false, maxLength: 128),
+                        SupportUser_Id = c.String(maxLength: 128),
                         CreatedAt = c.DateTime(nullable: false),
                         ExpectedAt = c.DateTime(nullable: false),
                         ResolvedAt = c.DateTime(nullable: false),
                         ProblemData = c.String(nullable: false),
                         SolutionData = c.String(),
                         IsSolved = c.Boolean(nullable: false),
-                        SupportUser_Id = c.String(maxLength: 128),
-                        UserThatIncluded_Id = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.SupportUser_Id)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserThatIncluded_Id, cascadeDelete: true)
-                .Index(t => t.SupportUser_Id)
-                .Index(t => t.UserThatIncluded_Id);
+                .Index(t => t.UserThatIncluded_Id)
+                .Index(t => t.SupportUser_Id);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -134,8 +134,8 @@ namespace SmallDesk.Migrations
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.AspNetUsers", new[] { "DepartmentId" });
-            DropIndex("dbo.Issues", new[] { "UserThatIncluded_Id" });
             DropIndex("dbo.Issues", new[] { "SupportUser_Id" });
+            DropIndex("dbo.Issues", new[] { "UserThatIncluded_Id" });
             DropTable("dbo.AspNetRoles");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");

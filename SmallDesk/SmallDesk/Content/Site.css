@@ -3,6 +3,10 @@
     margin-top: 52px;
 }
 
+textarea {
+    resize: none;
+}
+
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;

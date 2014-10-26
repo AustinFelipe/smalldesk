@@ -24,6 +24,10 @@
                 {
                     <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
+                        @if (User.IsInRole("Support") || User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Chamados", "Index", "Issue")</li>
+                        }
                         @if (User.IsInRole("Admin"))
                         {
                             <li>@Html.ActionLink("Usuários", "Index", "Account")</li>
