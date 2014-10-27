@@ -1,0 +1,89 @@
+﻿@model SmallDesk.Models.Issue
+
+@{
+    ViewBag.Title = "Detalhes";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Issue #@(Model.Id)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserThatIncluded_Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GetUserThatIncluded)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SupportUser_Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GetSupportUser)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserThatReported_Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GetUserThatReported)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpectedAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpectedAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResolvedAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResolvedAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProblemData)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProblemData)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SolutionData)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SolutionData)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsSolved)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsSolved)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Voltar para a lista", "Index")
+</p>

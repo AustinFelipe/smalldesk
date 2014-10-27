@@ -1,63 +1,72 @@
-﻿
+﻿@model IEnumerable<SmallDesk.Models.Issue>
+
 @{
     ViewBag.Title = "Dashboard";
 }
 
 <h2>Dashboard</h2>
+<h3>Veja aqui os seus chamados</h3>
 
-<h3>Lista de chamados</h3>
-
-<table class="table table-striped table-hover ">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>#</th>
-            <th>Column heading</th>
-            <th>Column heading</th>
-            <th>Column heading</th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserThatReported_Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpectedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResolvedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProblemData)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SolutionData)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsSolved)
+            </th>
+            <th></th>
         </tr>
     </thead>
-    <tbody>
+
+    @foreach (var item in Model)
+    {
         <tr>
-            <td>1</td>
-            <td>Column content</td>
-            <td>Column content</td>
-            <td>Column content</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GetUserThatReported)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpectedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResolvedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GetShortDescProblem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GetShortDescSolution)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsSolved)
+            </td>
+            <td>
+                @Html.ActionLink("Detalhes", "Details", "Issue", new { id = item.Id }, null)
+            </td>
         </tr>
-        <tr>
-            <td>2</td>
-            <td>Column content</td>
-            <td>Column content</td>
-            <td>Column content</td>
-        </tr>
-        <tr class="info">
-            <td>3</td>
-            <td>Column content</td>
-            <td>Column content</td>
-            <td>Column content</td>
-        </tr>
-        <tr class="success">
-            <td>4</td>
-            <td>Column content</td>
-            <td>Column content</td>
-            <td>Column content</td>
-        </tr>
-        <tr class="danger">
-            <td>5</td>
-            <td>Column content</td>
-            <td>Column content</td>
-            <td>Column content</td>
-        </tr>
-        <tr class="warning">
-            <td>6</td>
-            <td>Column content</td>
-            <td>Column content</td>
-            <td>Column content</td>
-        </tr>
-        <tr class="active">
-            <td>7</td>
-            <td>Column content</td>
-            <td>Column content</td>
-            <td>Column content</td>
-        </tr>
-    </tbody>
-</table> 
+    }
+
+</table>

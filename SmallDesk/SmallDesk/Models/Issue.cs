@@ -54,5 +54,30 @@ namespace SmallDesk.Models
 
         [Display(Name = "Resolvido?")]
         public bool IsSolved { get; set; }
+
+        public string GetUserThatIncluded
+        {
+            get { return UserThatIncluded.UserName ?? ""; }
+        }
+
+        public string GetUserThatReported
+        {
+            get { return UserThatReported.UserName ?? ""; }
+        }
+
+        public string GetSupportUser
+        {
+            get { return SupportUser.UserName ?? ""; }
+        }
+
+        public string GetShortDescProblem 
+        {
+            get { return ProblemData.Length > 20 ? ProblemData.Substring(0, 20) : ProblemData; } 
+        }
+
+        public string GetShortDescSolution 
+        {
+            get { return SolutionData.Length > 20 ? SolutionData.Substring(0, 20) : SolutionData; } 
+        }
     }
 }
