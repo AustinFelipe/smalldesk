@@ -72,12 +72,12 @@ namespace SmallDesk.Models
 
         public string GetShortDescProblem 
         {
-            get { return ProblemData.Length > 20 ? ProblemData.Substring(0, 20) : ProblemData; } 
+            get { return ProblemData.Length > 20 ? ProblemData.Substring(0, 17) + "..." : ProblemData; } 
         }
 
         public string GetShortDescSolution 
         {
-            get { return SolutionData.Length > 20 ? SolutionData.Substring(0, 20) : SolutionData; } 
+            get { return SolutionData.Length > 20 ? SolutionData.Substring(0, 17) + "..." : SolutionData; } 
         }
     }
 }

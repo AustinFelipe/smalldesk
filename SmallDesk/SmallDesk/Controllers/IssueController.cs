@@ -41,9 +41,77 @@ namespace SmallDesk.Controllers
 
         // GET: Issue
         [Authorize(Roles = "Admin, Support")]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string problem, 
+            string supportUser, string userThatReport, bool? closed = true)
         {
-            var issues = Database.Issues.ToList();
+            List<Issue> issues = new List<Issue>();
+            var query = Database.Issues.AsQueryable();
+
+            ViewBag.problem = problem;
+            ViewBag.sortOrder = sortOrder ?? "create_at";
+            ViewBag.supportUser = supportUser;
+            ViewBag.userThatReport = userThatReport;
+            ViewBag.hasFilter = false;
+            ViewBag.orderBy = String.Empty;
+            ViewBag.closed = closed;
+
+            if (!String.IsNullOrEmpty(sortOrder))
+            {
+                switch (sortOrder)
+                {
+                    case "create_at_desc":
+                        query = query.OrderByDescending(t => t.CreatedAt);
+                        ViewBag.orderBy = "Data Inclusão (Desc)";
+                        break;
+                    case "support_user":
+                        query = query.OrderBy(t => t.SupportUser.UserName);
+                        ViewBag.orderBy = "Técnico (Asc)";
+                        break;
+                    case "support_user_desc":
+                        query = query.OrderByDescending(t => t.SupportUser.UserName);
+                        ViewBag.orderBy = "Técnico (Desc)";
+                        break;
+                    case "user_that_report":
+                        query = query.OrderBy(t => t.UserThatReported.UserName);
+                        ViewBag.orderBy = "Usuário Reportador (Asc)";
+                        break;
+                    case "user_that_report_desc":
+                        query = query.OrderByDescending(t => t.UserThatReported.UserName);
+                        ViewBag.orderBy = "Usuário Reportador (Desc)";
+                        break;
+                    default:
+                        ViewBag.sortOrder = "create_at";
+                        query = query.OrderBy(t => t.CreatedAt);
+                        break;
+                }
+            }
+
+            if (!String.IsNullOrEmpty(problem))
+            {
+                ViewBag.hasFilter = true;
+                query = query.Where(t => t.ProblemData.Contains(problem));
+            }
+
+            if (!String.IsNullOrEmpty(supportUser))
+            {
+                ViewBag.hasFilter = true;
+                query = query.Where(t => t.SupportUser.UserName.Contains(supportUser));
+            }
+
+            if (!String.IsNullOrEmpty(userThatReport))
+            {
+                ViewBag.hasFilter = true;
+                query = query.Where(t => t.UserThatReported.UserName.Contains(userThatReport));
+            }
+
+            if (closed == false)
+            {
+                ViewBag.hasFilter = true;
+                query = query.Where(t => !t.IsSolved);
+            }
+
+            issues = query.ToList();
+
             return View(issues);
         }
 

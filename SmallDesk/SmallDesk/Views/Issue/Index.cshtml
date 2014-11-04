@@ -4,11 +4,53 @@
     ViewBag.Title = "Chamados";
 }
 
+<style>
+    .no-width-restriction {
+        max-width: none;
+    }
+</style>
+
 <h2>Chamados</h2>
 
 <p>
-    @Html.ActionLink("Criar novo", "Create")
+    @Html.ActionLink("Criar novo", "Create", null, new { @class = "btn btn-default" })
+    <button id="filter" class="btn btn-default" data-toggle="modal" data-target="#filterModel">
+        <span><i class="glyphicon glyphicon-filter"></i></span> Filtros / Ordenação
+    </button>
 </p>
+@if (ViewBag.hasFilter || !String.IsNullOrEmpty(ViewBag.orderBy))
+{
+    <div class="alert alert-warning">
+        <h4>Atenção!</h4>
+        @if (ViewBag.hasFilter)
+        {
+            string filter = String.Empty;
+            if (!String.IsNullOrEmpty(ViewBag.problem))
+            {
+                filter = "Desc. Problema";
+            }
+            if (!String.IsNullOrEmpty(ViewBag.supportUser))
+            {
+                filter = filter.IsEmpty() ? "Técnico" : filter + ", Técnico";
+            }
+            if (!String.IsNullOrEmpty(ViewBag.userThatReport))
+            {
+                filter = filter.IsEmpty() ? "Usuário Reportador" : filter + ", Usuário Reportador";
+            }
+            if (!ViewBag.closed)
+            {
+                filter = filter.IsEmpty() ? "Não Resolvidos" : filter + ", Não Resolvidos";
+            }
+            
+            <p>O conteúdo está sendo filtrado por: <strong>@filter</strong></p>
+        }
+        
+        @if (!String.IsNullOrEmpty(ViewBag.orderBy))
+        {
+            <p>O conteúdo está sendo ordenado por: <strong>@ViewBag.orderBy</strong></p>
+        }
+    </div>
+}
 <table class="table table-striped table-hover">
     <thead>
         <tr>
@@ -73,3 +115,115 @@
     }
 
 </table>
+
+<div id="filterModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Filtros</h4>
+                
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Index", "Issue", FormMethod.Get, new { id = "filterForm", @class = "form-horizontal" }))
+                {
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="problem" class="col-lg-2 control-label">@Html.DisplayNameFor(model => model.ProblemData)</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control no-width-restriction" 
+                                       id="problem" name="problem" placeholder="Parte do problema"
+                                       value="@(ViewBag.problem)"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="supportUser" class="col-lg-2 control-label">Técnico</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control no-width-restriction"
+                                       id="supportUser" name="supportUser" placeholder="Técnico responsável"
+                                       value="@(ViewBag.supportUser)"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userThatReport" class="col-lg-2 control-label">Usuário Reportador</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control no-width-restriction"
+                                       id="userThatReport" name="userThatReport" placeholder="Usuário reportador"
+                                       value="@(ViewBag.userThatReport)" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Ordenado por</label>
+                            <div class="col-lg-10">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="sortOrder" 
+                                               id="create_at" value="create_at"
+                                               @(ViewBag.sortOrder == "create_at" ? "checked" : "")>
+                                        Data de Inclusão (Asc) - Padrão
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="sortOrder"
+                                               id="create_at_desc" value="create_at_desc"
+                                               @(ViewBag.sortOrder == "create_at_desc" ? "checked" : "")>
+                                        Data de Inclusão (Desc)
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="sortOrder"
+                                               id="support_user" value="support_user"
+                                               @(ViewBag.sortOrder == "support_user" ? "checked" : "")>
+                                        Nome do Técnico (Asc)
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="sortOrder"
+                                               id="support_user_desc" value="support_user_desc"
+                                               @(ViewBag.sortOrder == "support_user_desc" ? "checked" : "")>
+                                        Nome do Técnico (Desc)
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="sortOrder"
+                                               id="user_that_report" value="user_that_report"
+                                               @(ViewBag.sortOrder == "user_that_report" ? "checked" : "")>
+                                        Nome do Usuário (Asc)
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="sortOrder"
+                                               id="user_that_report_desc" value="user_that_report_desc"
+                                               @(ViewBag.sortOrder == "user_that_report_desc" ? "checked" : "")>
+                                        Nome do Usuário (Desc)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userThatReport" class="col-lg-2 control-label">Trazer Resolvidos?</label>
+                            <div class="col-lg-10">
+                                <select class="form-control" id="closed" name="closed">
+                                    <option value="true" @(ViewBag.closed ? "selected" : "")>Sim</option>
+                                    <option value="false" @(!ViewBag.closed ? "selected" : "")>Não</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+            }
+            </div>
+            <div class="modal-footer">
+                <a href="/issue" class="btn btn-danger pull-left"><span><i class="glyphicon glyphicon-remove"></i></span> Limpar Tudo</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="javascript: document.getElementById('filterForm').submit()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
