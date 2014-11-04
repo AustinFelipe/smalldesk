@@ -1,8 +1,11 @@
-﻿@model IEnumerable<SmallDesk.Models.Issue>
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<SmallDesk.Models.Issue>
+@*model IEnumerable<SmallDesk.Models.Issue> *@
 
 @{
     ViewBag.Title = "Chamados";
 }
+
 
 <style>
     .no-width-restriction {
@@ -56,25 +59,25 @@
         <tr>
             <th>#</th>
             <th>
-                @Html.DisplayNameFor(model => model.UserThatReported_Id)
+                User Reportador
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
+                Criado Em
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ExpectedAt)
+                Data Máx.
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ResolvedAt)
+                Data Resolução
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProblemData)
+                Desc. Problema
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SolutionData)
+                Desc. Solução
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsSolved)
+                Resolvido?
             </th>
             <th></th>
         </tr>
@@ -116,6 +119,16 @@
 
 </table>
 
+<br />
+Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+                new { page = page, sortOrder = ViewBag.sortOrder, problem = ViewBag.problem,
+                      supportUser = ViewBag.supportUser,
+                      userThatReport = ViewBag.userThatReport,
+                      closed = ViewBag.closed
+                }))
+
 <div id="filterModel" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -127,10 +140,10 @@
             <div class="modal-body">
                 @using (Html.BeginForm("Index", "Issue", FormMethod.Get, new { id = "filterForm", @class = "form-horizontal" }))
                 {
-
+                    <input type="hidden" name="page" id="page" value="@Model.PageNumber" />
                     <fieldset>
                         <div class="form-group">
-                            <label for="problem" class="col-lg-2 control-label">@Html.DisplayNameFor(model => model.ProblemData)</label>
+                            <label for="problem" class="col-lg-2 control-label">Desc. Problema</label>
                             <div class="col-lg-10">
                                 <input type="text" class="form-control no-width-restriction" 
                                        id="problem" name="problem" placeholder="Parte do problema"

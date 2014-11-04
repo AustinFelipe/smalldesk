@@ -9,6 +9,7 @@ using SmallDesk.Helpers;
 using Microsoft.Owin.Security;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using PagedList;
 
 namespace SmallDesk.Controllers
 {
@@ -42,9 +43,9 @@ namespace SmallDesk.Controllers
         // GET: Issue
         [Authorize(Roles = "Admin, Support")]
         public ActionResult Index(string sortOrder, string problem, 
-            string supportUser, string userThatReport, bool? closed = true)
+            string supportUser, string userThatReport, bool? closed = true,
+            int? page = 1)
         {
-            List<Issue> issues = new List<Issue>();
             var query = Database.Issues.AsQueryable();
 
             ViewBag.problem = problem;
@@ -110,7 +111,10 @@ namespace SmallDesk.Controllers
                 query = query.Where(t => !t.IsSolved);
             }
 
-            issues = query.ToList();
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            var issues = query.ToList().ToPagedList(pageNumber, pageSize);
 
             return View(issues);
         }
