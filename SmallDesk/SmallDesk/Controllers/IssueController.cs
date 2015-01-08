@@ -111,15 +111,19 @@ namespace SmallDesk.Controllers
                 query = query.Where(t => !t.IsSolved);
             }
 
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
+            int pageSize = returnPdf == true ? query.Count() : 10;
+            int pageNumber = returnPdf == true ? 1 : (page ?? 1);
 
             var issues = query.ToList().ToPagedList(pageNumber, pageSize);
-
+            
             if (returnPdf == true)
+            {
                 return new RazorPDF.PdfResult(issues, "ExportPDF");
+            }
             else
+            {
                 return View(issues);
+            }
         }
 
         [Authorize(Roles = "Admin, Support")]
