@@ -25,7 +25,8 @@
     </button>
     <script>
         document.getElementById("printer").onclick = function () {
-            window.open(location.search + "&returnPDF=true", "_blank");
+            var openUrl = location.search === "" ? "?returnPDF=true" : location.search + "&returnPDF=true";
+            window.open(openUrl, "_blank");
         }
     </script>
 </p>
