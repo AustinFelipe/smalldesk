@@ -1,0 +1,79 @@
+﻿@model IEnumerable<SmallDesk.Models.Issue>
+
+@{
+    Layout = null;
+}
+
+<itext creationdata="@DateTime.Now.ToString()" producer="SmallDesk">
+    <paragraph style="font-size:18px">
+        <chunk style="font-weight: bold;">Chamados</chunk>
+    </paragraph>
+    <table width="100%" cellpadding="1" widths="5;15;20;20;20;20">
+
+        @foreach (var item in Model)
+        {
+            <row>
+                <cell><chunk style="font-weight: bold;text-decoration:underline;font-size:12px;">#</chunk></cell>
+                <cell><chunk style="font-weight: bold;text-decoration:underline;">User Report.</chunk></cell>
+                <cell><chunk style="font-weight: bold;text-decoration:underline;">Criado Em</chunk></cell>
+                <cell><chunk style="font-weight: bold;text-decoration:underline;">Data Máx.</chunk></cell>
+                <cell>
+                    <chunk style="font-weight: bold;text-decoration:underline;">Data Resolução</chunk>
+                </cell>
+                <cell>
+                    <chunk style="font-weight: bold;text-decoration:underline;">Fechado?</chunk>
+                </cell>
+            </row>
+            <row>
+                <cell>
+                    <chunk style="font-size: 12px;">@Html.DisplayFor(modelItem => item.Id)</chunk>
+</cell>
+                <cell>
+                    <chunk style="font-size: 12px;">@Html.DisplayFor(modelItem => item.GetUserThatReported)</chunk>
+</cell>
+                <cell>
+                    <chunk style="font-size: 10px;">@Html.DisplayFor(modelItem => item.CreatedAt)</chunk>
+</cell>
+                <cell>
+                    <chunk style="font-size: 10px;">@Html.DisplayFor(modelItem => item.ExpectedAt)</chunk>
+</cell>
+                <cell>
+                    <chunk style="font-size: 10px;">@Html.DisplayFor(modelItem => item.ResolvedAt)</chunk>
+</cell>
+                <cell>
+                    @if (item.IsSolved)
+                    {
+                        <chunk style="">Sim</chunk>
+                    }
+                    else
+                    {
+                        <chunk style="">Não</chunk>
+                    }
+                </cell>
+            </row>
+
+            <row>
+                <cell colspan="6"><chunk style="font-weight: bold;text-decoration:underline;">Descrição do Problema</chunk></cell>
+            </row>
+            <row>
+                <cell colspan="6"><chunk style="">@Html.DisplayFor(modelItem => item.ProblemData)</chunk></cell>
+            </row>
+
+            if (!String.IsNullOrEmpty(item.SolutionData))
+            {
+                <row>
+                    <cell colspan="6"><chunk style="font-weight: bold;text-decoration:underline;">Descrição da Solução</chunk></cell>
+                </row>
+                <row>
+                    <cell colspan="6"><chunk style="">@Html.DisplayFor(modelItem => item.SolutionData)</chunk></cell>
+                </row>
+            }
+            <row>
+                <cell colspan="6"></cell>
+            </row>
+            <row>
+                <cell colspan="6"></cell>
+            </row>
+        }
+    </table>
+</itext cre>

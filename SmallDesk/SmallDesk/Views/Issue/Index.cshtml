@@ -20,6 +20,14 @@
     <button id="filter" class="btn btn-default" data-toggle="modal" data-target="#filterModel">
         <span><i class="glyphicon glyphicon-filter"></i></span> Filtros / Ordenação
     </button>
+    <button id="printer" class="btn btn-default">
+        <span><i class="glyphicon glyphicon-print"></i></span> Imprimir
+    </button>
+    <script>
+        document.getElementById("printer").onclick = function () {
+            window.open(location.search + "&returnPDF=true", "_blank");
+        }
+    </script>
 </p>
 @if (ViewBag.hasFilter || !String.IsNullOrEmpty(ViewBag.orderBy))
 {

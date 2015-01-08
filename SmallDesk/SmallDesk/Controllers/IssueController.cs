@@ -44,7 +44,7 @@ namespace SmallDesk.Controllers
         [Authorize(Roles = "Admin, Support")]
         public ActionResult Index(string sortOrder, string problem, 
             string supportUser, string userThatReport, bool? closed = true,
-            int? page = 1)
+            int? page = 1, bool? returnPdf = false)
         {
             var query = Database.Issues.AsQueryable();
 
@@ -116,7 +116,10 @@ namespace SmallDesk.Controllers
 
             var issues = query.ToList().ToPagedList(pageNumber, pageSize);
 
-            return View(issues);
+            if (returnPdf == true)
+                return new RazorPDF.PdfResult(issues, "ExportPDF");
+            else
+                return View(issues);
         }
 
         [Authorize(Roles = "Admin, Support")]
